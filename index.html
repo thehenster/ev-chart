@@ -1,1 +1,81 @@
-Hi
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.min.js" integrity="sha512-SuxO9djzjML6b9w9/I07IWnLnQhgyYVSpHZx0JV97kGBfTIsUYlWflyuW4ypnvhBrslz1yJ3R+S14fdCWmSmSA==" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <canvas id="chart-cost-per-mile-of-range" width="400" height="400"></canvas>
+    <table id="table">
+      <thead>
+        <tr>
+          <th>Vehicle</th>
+          <th>Price (GBP)</th>
+          <th>Range (miles)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Volkswagen ID.3 Pro S</td>
+          <td>39290</td>
+          <td>280</td>
+        </tr>
+        <tr>
+          <td>Kia e-Niro 64 kWh</td>
+          <td>33850</td>
+          <td>230</td>
+        </tr>
+        <tr>
+          <td>Peugeot e-208</td>
+          <td>25550</td>
+          <td>170</td>
+        </tr>
+        <tr>
+          <td>Tesla Model 3 Long Range Dual Motor</td>
+          <td>46990</td>
+          <td>305</td>
+        </tr>
+        <tr>
+          <td>Polestar 2</td>
+          <td>46900</td>
+          <td>235</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <script>
+      var ctx = document.getElementById('chart');
+
+      var defaultConfig = {
+        type: 'horizontalBar',
+        labels: [],
+        data: {
+          datasets: []
+        },
+        options: {
+          scales: {
+            xAxes: [{
+              ticks: {
+                beginAtZero: true
+              }
+            }]
+          }
+        }
+      }
+
+      configCostPerMileOfRange = defaultConfig;
+
+      var vehicleNames = Array.from(document.querySelectorAll('#table tbody tr td:nth-child(1)')).map(e => e.innerHTML);
+      configCostPerMileOfRange.data.labels = vehicleNames;
+
+      var prices = Array.from(document.querySelectorAll('#table tbody tr td:nth-child(2)')).map(e => Number(e.innerHTML));
+
+      var ranges = Array.from(document.querySelectorAll('#table tbody tr td:nth-child(3)')).map(e => Number(e.innerHTML));
+
+      configCostPerMileOfRange.data.datasets.push({
+        data: ranges.map((range, index) => prices[index] / range),
+        label: 'Cost per mile of range'
+      });
+
+      new Chart(document.getElementById('chart-cost-per-mile-of-range'), configCostPerMileOfRange);
+    </script>
+  </body>
+</html>
